@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
+[RequireComponent(typeof(AudioSource))]
+
 public class Alarm : MonoBehaviour
 {
     [SerializeField] public AudioSource _audioSource;

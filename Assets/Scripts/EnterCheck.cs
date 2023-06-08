@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
+[RequireComponent(typeof(Alarm))]
+
 public class EnterCheck : MonoBehaviour
 {
     [SerializeField] private Alarm _alarm;
