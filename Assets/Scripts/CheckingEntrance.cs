@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 [RequireComponent(typeof(Alarm))]
 
-public class EnterCheck : MonoBehaviour
+public class CheckingEntrance : MonoBehaviour
 {
     [SerializeField] private Alarm _alarm;
 
@@ -13,7 +14,11 @@ public class EnterCheck : MonoBehaviour
     {
         if (collision.TryGetComponent<ThirdPersonCharacter>(out ThirdPersonCharacter player))
         {
-            _alarm.RiseOnAlarm();
+            if (!_alarm.AudioSource.isPlaying)
+            {
+                _alarm.AudioSource.Play();
+            }
+            _alarm.ChangeVolumeAlarm(_alarm.MaxAlarmVolume);
         }
     }
 
@@ -21,7 +26,7 @@ public class EnterCheck : MonoBehaviour
     {
         if (collision.TryGetComponent<ThirdPersonCharacter>(out ThirdPersonCharacter player))
         {
-            _alarm.DownOnAlarm();
+            _alarm.ChangeVolumeAlarm(_alarm.MinAlarmVolume);
         }
     }
 }

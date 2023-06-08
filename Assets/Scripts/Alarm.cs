@@ -9,90 +9,60 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class Alarm : MonoBehaviour
 {
-    [SerializeField] public AudioSource _audioSource;
+    [SerializeField] public AudioSource AudioSource;
 
     private float _currentAlarmVolume;
     private float _deltaAlarmVolume;
-    private float _minAlarmVolume;
-    private float _maxAlarmVolume;
     private Coroutine _workingCoroutine;
+
+    public float MinAlarmVolume { get; private set; }
+    public float MaxAlarmVolume { get; private set; }
 
     public bool IsWorkingCorutine { get; private set; }
 
     private void Start()
     {
-        _audioSource= GetComponent<AudioSource>();
-        _audioSource.volume = 0;
-        _currentAlarmVolume = _audioSource.volume;
+        AudioSource= GetComponent<AudioSource>();
+        AudioSource.Play();
+        AudioSource.volume = 0;
+        _currentAlarmVolume = AudioSource.volume;
         _deltaAlarmVolume = 0.2f;
-        _minAlarmVolume = 0f;
-        _maxAlarmVolume= 1f;
+        MinAlarmVolume = 0f;
+        MaxAlarmVolume= 1f;
     }
 
     private IEnumerator OnAlarm(float targetAlarmVolume)
     {
-        IsWorkingCorutine = true;
-
         while (_currentAlarmVolume != targetAlarmVolume)
         {
             _currentAlarmVolume = Mathf.MoveTowards(_currentAlarmVolume, targetAlarmVolume, _deltaAlarmVolume * Time.deltaTime);
-            _audioSource.volume = _currentAlarmVolume;
+            AudioSource.volume = _currentAlarmVolume;
+
+            if (_currentAlarmVolume == MinAlarmVolume)
+            {
+                AudioSource.Stop();
+            }
 
             if (_currentAlarmVolume == targetAlarmVolume)
             {
-                IsWorkingCorutine = false;
-                break;
+                StopCoroutine(_workingCoroutine);
+                _workingCoroutine = null;
             }
 
             yield return null;
         }
     }
 
-    private void Update()
-    {
-        if (_workingCoroutine != null)
-        {
-            if (!IsWorkingCorutine)
-            {
-                if (_currentAlarmVolume == _maxAlarmVolume)
-                {
-                    StopCoroutine(_workingCoroutine);
-                    _workingCoroutine = null;
-                }
-                else if (_currentAlarmVolume == _minAlarmVolume)
-                {
-                    StopCoroutine(_workingCoroutine);
-                    _workingCoroutine = null;
-                    _audioSource.Stop();
-                }
-            }
-        }
-    }
-
-    public void RiseOnAlarm()
+    public void ChangeVolumeAlarm(float targetAlarmVolume)
     {
         if (_workingCoroutine == null)
         {
-            _audioSource.Play();
-            _workingCoroutine = StartCoroutine(OnAlarm(_maxAlarmVolume));
+            _workingCoroutine = StartCoroutine(OnAlarm(targetAlarmVolume));
         }
         else
         {
             StopCoroutine(_workingCoroutine);
-            _workingCoroutine = StartCoroutine(OnAlarm(_maxAlarmVolume));
-        }
-    }
-
-    public void DownOnAlarm()
-    {
-        if (_workingCoroutine == null)
-        {
-            _workingCoroutine = StartCoroutine(OnAlarm(_minAlarmVolume));
-        }
-        else
-        {
-            StopCoroutine(_workingCoroutine);
-            _workingCoroutine = StartCoroutine(OnAlarm(_minAlarmVolume));
+            _workingCoroutine = StartCoroutine(OnAlarm(targetAlarmVolume));
         }
     }
 }
