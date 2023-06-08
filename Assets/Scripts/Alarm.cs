@@ -21,6 +21,7 @@ public class Alarm : MonoBehaviour
 
     private void Start()
     {
+        _audioSource= GetComponent<AudioSource>();
         _audioSource.volume = 0;
         _currentAlarmVolume = _audioSource.volume;
         _deltaAlarmVolume = 0.2f;

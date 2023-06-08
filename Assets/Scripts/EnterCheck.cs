@@ -15,7 +15,6 @@ public class EnterCheck : MonoBehaviour
         {
             _alarm.RiseOnAlarm();
         }
-
     }
 
     private void OnTriggerExit(Collider collision)
@@ -24,6 +23,5 @@ public class EnterCheck : MonoBehaviour
         {
             _alarm.DownOnAlarm();
         }
-
     }
 }
