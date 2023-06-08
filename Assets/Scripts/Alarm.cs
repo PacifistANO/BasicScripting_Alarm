@@ -9,7 +9,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class Alarm : MonoBehaviour
 {
-    [SerializeField] public AudioSource AudioSource;
+    [SerializeField] public AudioSource AudioSource { get; private set; }
 
     private float _currentAlarmVolume;
     private float _deltaAlarmVolume;
