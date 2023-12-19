@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
 [RequireComponent(typeof(Alarm))]
-
 public class CheckingEntrance : MonoBehaviour
 {
     [SerializeField] private Alarm _alarm;
