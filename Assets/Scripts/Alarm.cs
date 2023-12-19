@@ -18,12 +18,10 @@ public class Alarm : MonoBehaviour
     public float MinAlarmVolume { get; private set; }
     public float MaxAlarmVolume { get; private set; }
 
-    public bool IsWorkingCorutine { get; private set; }
-
     private void Start()
     {
         AudioSource= GetComponent<AudioSource>();
-        AudioSource.Play();
+        AlarmPlay();
         AudioSource.volume = 0;
         _currentAlarmVolume = AudioSource.volume;
         _deltaAlarmVolume = 0.2f;
@@ -43,12 +41,6 @@ public class Alarm : MonoBehaviour
                 AudioSource.Stop();
             }
 
-            if (_currentAlarmVolume == targetAlarmVolume)
-            {
-                StopCoroutine(_workingCoroutine);
-                _workingCoroutine = null;
-            }
-
             yield return null;
         }
     }
@@ -56,13 +48,19 @@ public class Alarm : MonoBehaviour
     public void ChangeVolumeAlarm(float targetAlarmVolume)
     {
         if (_workingCoroutine == null)
-        {
             _workingCoroutine = StartCoroutine(OnAlarm(targetAlarmVolume));
-        }
         else
         {
             StopCoroutine(_workingCoroutine);
             _workingCoroutine = StartCoroutine(OnAlarm(targetAlarmVolume));
+        }
+    }
+
+    public void AlarmPlay()
+    {
+        if (!AudioSource.isPlaying)
+        {
+            AudioSource.Play();
         }
     }
 }

@@ -14,10 +14,7 @@ public class CheckingEntrance : MonoBehaviour
     {
         if (collision.TryGetComponent<ThirdPersonCharacter>(out ThirdPersonCharacter player))
         {
-            if (!_alarm.AudioSource.isPlaying)
-            {
-                _alarm.AudioSource.Play();
-            }
+            _alarm.AlarmPlay();
             _alarm.ChangeVolumeAlarm(_alarm.MaxAlarmVolume);
         }
     }
